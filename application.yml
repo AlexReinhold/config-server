@@ -1,0 +1,40 @@
+#Actuator management path
+#management.context-path: /admin
+
+info.configuration: Read From Config Service application.properties
+
+#Enabling actuator endpoints
+#Enabling actuator endpoints
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+logging.level.com.netflix.discovery: 'OFF'
+logging.level.org.springframework.cloud: 'DEBUG'
+
+server:
+  tomcat:
+    compression: on
+    
+#eureka.instance.statusPageUrlPath: /admin/info
+#eureka.instance.healthCheckUrlPath: /admin/health
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 5
+    preferIpAddress: true
+    metadataMap:
+      hostname: ${vcap.application.application_uris[0]}
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value:0000}}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+        defaultZone: ${INT_EUREKA_HOST:http://localhost:8761/eureka/}
+
+
+hystrix.stream.amqp.send-id: false
